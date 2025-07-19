@@ -1,5 +1,4 @@
 const { createApp, ref, onMounted, computed } = Vue
-
   createApp({
     setup() {
       const vehicles = ref([
@@ -179,99 +178,5 @@ const { createApp, ref, onMounted, computed } = Vue
       }
 
       return { vehicles, search, filter, filtered, focusVehicle, recenterMap }
-    },
-
-template:`
-<div class="bg-gray-50">
-<div id="app" class="container mx-auto px-4 py-8 max-w-6xl">
-  <div class="bg-white rounded-xl shadow-md overflow-hidden p-6">
-    <h1 class="text-2xl font-bold text-gray-800 mb-6">Vehicle Tracking Dashboard</h1>
-
-    <!-- Map Section -->
-    <div class="mb-8 relative">
-      <div id="map"></div>
-      <button 
-        @click="recenterMap"
-        id="recenter"
-        class="absolute top-4 right-4 z-[1000] px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors shadow-md"
-      >
-        Recenter Map
-      </button>
-    </div>
-
-    <!-- Table Section -->
-    <div>
-      <div class="flex flex-col md:flex-row gap-4 mb-4">
-        <div class="flex-grow">
-          <input 
-            v-model="search" 
-            placeholder="Search vehicles..." 
-            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
-          >
-        </div>
-        <select 
-          v-model="filter"
-          class="px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
-        >
-          <option value="">All Statuses</option>
-          <option value="online">🟢 Online</option>
-          <option value="offline">⚪ Offline</option>
-          <option value="alert">🔴 Alert</option>
-        </select>
-      </div>
-      
-      <div class="overflow-auto rounded-lg border border-gray-200">
-        <table class="min-w-full divide-y divide-gray-200">
-          <thead class="bg-gray-50">
-            <tr>
-              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Vehicle</th>
-              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Plate</th>
-              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
-              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Last Update</th>
-            </tr>
-          </thead>
-          <tbody class="bg-white divide-y divide-gray-200">
-            <tr 
-              v-for="v in filtered" 
-              :key="v.id" 
-              @click="focusVehicle(v)"
-              class="hover:bg-gray-50 cursor-pointer transition-colors"
-            >
-              <td class="px-6 py-4 whitespace-nowrap">
-                <div class="font-medium text-gray-900">{{ v.name }}</div>
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap text-gray-500">{{ v.plate }}</td>
-              <td class="px-6 py-4 whitespace-nowrap">
-                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full" 
-                  :class="{
-                    'bg-blue-100 text-blue-800': v.type === 'Car',
-                    'bg-green-100 text-green-800': v.type === 'Truck',
-                    'bg-purple-100 text-purple-800': v.type === 'Van'
-                  }">
-                  {{ v.type }}
-                </span>
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap">
-                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full" 
-                  :class="{
-                    'bg-green-100 text-green-800': v.status === 'online',
-                    'bg-gray-100 text-gray-800': v.status === 'offline',
-                    'bg-red-100 text-red-800': v.status === 'alert'
-                  }">
-                  {{ v.status }}
-                </span>
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                {{ new Date(v.lastUpdated).toLocaleString() }}
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-</div>
-</div>
-`
+    }
   }).mount('#app')
