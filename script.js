@@ -59,7 +59,6 @@ const { createApp, ref, onMounted, computed } = Vue
       const search = ref('')
       const filter = ref('')
       const routeLine = ref(null)
-      const activeTab = ref('map')
 
       const filtered = computed(() =>
         vehicles.value.filter(v => {
@@ -167,7 +166,19 @@ const { createApp, ref, onMounted, computed } = Vue
         map.value.setView([v.location.lat, v.location.lng], 14)
       }
 
-      return { vehicles, search, filter, filtered, focusVehicle, activeTab }
+      function recenterMap() {
+        if (filtered.value.length > 0) {
+          const bounds = []
+          filtered.value.forEach(v => {
+            bounds.push([v.location.lat, v.location.lng])
+          })
+          map.value.fitBounds(bounds, { padding: [50, 50] })
+        } else {
+          map.value.setView([25.276987, 55.296249], 12)
+        }
+      }
+
+      return { vehicles, search, filter, filtered, focusVehicle, recenterMap }
     },
 
 template:`
@@ -175,12 +186,17 @@ template:`
 <div id="app" class="container mx-auto px-4 py-8 max-w-6xl">
   <div class="bg-white rounded-xl shadow-md overflow-hidden p-6">
     <h1 class="text-2xl font-bold text-gray-800 mb-6">Vehicle Tracking Dashboard</h1>
-    
-    
 
     <!-- Map Section -->
-    <div class="mb-8">
+    <div class="mb-8 relative">
       <div id="map"></div>
+      <button 
+        @click="recenterMap"
+        id="recenter"
+        class="absolute top-4 right-4 z-[1000] px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors shadow-md"
+      >
+        Recenter Map
+      </button>
     </div>
 
     <!-- Table Section -->
